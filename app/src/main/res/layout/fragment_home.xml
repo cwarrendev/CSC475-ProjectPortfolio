@@ -2,26 +2,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     android:gravity="center">
 
-    <TextView
-        android:id="@+id/stepsTextView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Steps: 0"
-        android:textSize="24sp" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/caloriesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calories: 0.00"
-        android:textSize="24sp" />
+        <ProgressBar
+            android:id="@+id/stepsProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_margin="8dp" />
 
-    <TextView
-        android:id="@+id/milesTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Miles: 0.00"
-        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/stepsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Steps: 0"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp" />
+
+        <ProgressBar
+            android:id="@+id/caloriesProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_margin="8dp" />
+
+        <TextView
+            android:id="@+id/caloriesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calories: 0"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp" />
+
+        <ProgressBar
+            android:id="@+id/milesProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:layout_margin="8dp" />
+
+        <TextView
+            android:id="@+id/milesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Miles: 0"
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
 </LinearLayout>
