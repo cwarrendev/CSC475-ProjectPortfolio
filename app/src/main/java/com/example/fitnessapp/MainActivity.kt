@@ -8,6 +8,7 @@ import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -21,17 +22,40 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.fitnessapp.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
-        stepsTextView = findViewById(com.example.fitnessapp.R.id.stepsTextView)
+        stepsTextView = findViewById(R.id.stepsTextView)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         if (accelerometer == null) {
-            stepsTextView.text = "Accelerometer not available"
+            "Accelerometer not available".also { stepsTextView.text = it }
         } else {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    // Handle home action
+                    true
+                }
+                R.id.nav_dashboard -> {
+                    // Handle dashboard action
+                    true
+                }
+                R.id.nav_notifications -> {
+                    // Handle notifications action
+                    true
+                }
+                R.id.nav_profile -> {
+                    // Handle profile action
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -48,7 +72,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
                 if (delta > threshold) {
                     stepCount++
-                    stepsTextView.text = "Steps: $stepCount"
+                    stepsTextView.text = "Steps: ${this.stepCount}"
                 }
             }
         }
