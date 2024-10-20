@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlin.math.sqrt
@@ -20,9 +21,12 @@ class HomeFragment : Fragment(), SensorEventListener {
     private lateinit var stepsTextView: TextView
     private lateinit var caloriesTextView: TextView
     private lateinit var milesTextView: TextView
+    private lateinit var stepsProgressBar: ProgressBar
+    private lateinit var caloriesProgressBar: ProgressBar
+    private lateinit var milesProgressBar: ProgressBar
     private var stepCount = 0
     private var lastMagnitude = 0.0
-    private val threshold = 6.0 // Adjust this value to fine-tune step detection sensitivity
+    private val threshold = 6.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +36,9 @@ class HomeFragment : Fragment(), SensorEventListener {
         stepsTextView = view.findViewById(R.id.stepsTextView)
         caloriesTextView = view.findViewById(R.id.caloriesTextView)
         milesTextView = view.findViewById(R.id.milesTextView)
+        stepsProgressBar = view.findViewById(R.id.stepsProgressBar)
+        caloriesProgressBar = view.findViewById(R.id.caloriesProgressBar)
+        milesProgressBar = view.findViewById(R.id.milesProgressBar)
 
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -63,6 +70,11 @@ class HomeFragment : Fragment(), SensorEventListener {
                     val milesWalked = stepCount * 0.0005 // Example calculation
                     caloriesTextView.text = "Calories: %.2f".format(caloriesBurned)
                     milesTextView.text = "Miles: %.2f".format(milesWalked)
+
+                    // Update progress bars
+                    stepsProgressBar.progress = stepCount
+                    caloriesProgressBar.progress = (caloriesBurned * 100).toInt()
+                    milesProgressBar.progress = (milesWalked * 10000).toInt()
                 }
             }
         }

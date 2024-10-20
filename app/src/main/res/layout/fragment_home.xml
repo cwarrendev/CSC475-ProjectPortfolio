@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@android:color/system_background_dark">
 
     <FrameLayout
         android:layout_width="200dp"
@@ -16,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:indeterminate="false"
+            android:max="10000"
+            android:progress="0"
             android:progressDrawable="@drawable/circular_progress_bar" />
 
         <TextView
@@ -24,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Steps: 0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@android:color/holo_blue_dark"/>
     </FrameLayout>
 
     <FrameLayout
@@ -38,6 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:indeterminate="false"
+            android:max="10000"
+            android:progress="0"
             android:progressDrawable="@drawable/circular_progress_bar" />
 
         <TextView
@@ -46,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Calories: 0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@android:color/holo_blue_dark"/>
     </FrameLayout>
 
     <FrameLayout
@@ -60,6 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:indeterminate="false"
+            android:max="10000"
+            android:progress="0"
             android:progressDrawable="@drawable/circular_progress_bar" />
 
         <TextView
@@ -68,6 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Miles: 0"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@android:color/holo_blue_dark"/>
     </FrameLayout>
 </LinearLayout>
