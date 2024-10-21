@@ -1,6 +1,8 @@
 package com.example.fitnessapp
 
+import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.sqrt
 
 class HomeFragment : Fragment(), SensorEventListener {
@@ -27,6 +31,8 @@ class HomeFragment : Fragment(), SensorEventListener {
     private var stepCount = 0
     private var lastMagnitude = 0.0
     private val threshold = 6.0
+    private lateinit var dbHelper: StepDatabaseHelper
+    private lateinit var db: SQLiteDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,13 +49,64 @@ class HomeFragment : Fragment(), SensorEventListener {
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
+        dbHelper = StepDatabaseHelper(requireContext())
+        db = dbHelper.writableDatabase
+
+        loadStepsForToday()
+
         if (accelerometer == null) {
-            "Accelerometer not available".also { stepsTextView.text = it }
+            stepsTextView.text = "Accelerometer not available"
         } else {
             sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
         }
 
         return view
+    }
+
+    private fun loadStepsForToday() {
+        val date = getCurrentDate()
+        val cursor = db.query(
+            StepDatabaseHelper.TABLE_NAME,
+            arrayOf(StepDatabaseHelper.COLUMN_STEPS),
+            "${StepDatabaseHelper.COLUMN_DATE} = ?",
+            arrayOf(date),
+            null,
+            null,
+            null
+        )
+
+        if (cursor.moveToFirst()) {
+            stepCount = cursor.getInt(cursor.getColumnIndexOrThrow(StepDatabaseHelper.COLUMN_STEPS))
+        }
+        cursor.close()
+        updateUI()
+    }
+
+    private fun saveStepsForToday() {
+        val date = getCurrentDate()
+        val values = ContentValues().apply {
+            put(StepDatabaseHelper.COLUMN_DATE, date)
+            put(StepDatabaseHelper.COLUMN_STEPS, stepCount)
+        }
+        db.insertWithOnConflict(StepDatabaseHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE)
+    }
+
+    private fun getCurrentDate(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return sdf.format(Date())
+    }
+
+    private fun updateUI() {
+        stepsTextView.text = "Steps: $stepCount"
+        val caloriesBurned = stepCount * 0.04 // Example calculation
+        val milesWalked = stepCount * 0.0005 // Example calculation
+        caloriesTextView.text = "Calories: %.2f".format(caloriesBurned)
+        milesTextView.text = "Miles: %.2f".format(milesWalked)
+
+        // Update progress bars
+        stepsProgressBar.progress = stepCount
+        caloriesProgressBar.progress = (caloriesBurned * 100).toInt()
+        milesProgressBar.progress = (milesWalked * 10000).toInt()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -65,16 +122,8 @@ class HomeFragment : Fragment(), SensorEventListener {
 
                 if (delta > threshold) {
                     stepCount++
-                    stepsTextView.text = "Steps: $stepCount"
-                    val caloriesBurned = stepCount * 0.04 // Example calculation
-                    val milesWalked = stepCount * 0.0005 // Example calculation
-                    caloriesTextView.text = "Calories: %.2f".format(caloriesBurned)
-                    milesTextView.text = "Miles: %.2f".format(milesWalked)
-
-                    // Update progress bars
-                    stepsProgressBar.progress = stepCount
-                    caloriesProgressBar.progress = (caloriesBurned * 100).toInt()
-                    milesProgressBar.progress = (milesWalked * 10000).toInt()
+                    saveStepsForToday()
+                    updateUI()
                 }
             }
         }
