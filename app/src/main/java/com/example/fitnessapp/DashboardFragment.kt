@@ -23,7 +23,7 @@ class DashboardFragment : Fragment() {
         caloriesProgressBar = view.findViewById(R.id.caloriesProgressBar)
         milesProgressBar = view.findViewById(R.id.milesProgressBar)
 
-        // Example progress values
+        // TESTING: Set progress values for the progress bars
         stepsProgressBar.progress = 50
         caloriesProgressBar.progress = 30
         milesProgressBar.progress = 20

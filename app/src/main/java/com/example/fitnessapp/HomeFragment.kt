@@ -102,11 +102,11 @@ class HomeFragment : Fragment(), SensorEventListener {
     }
 
     private fun updateUI() {
-        stepsTextView.text = "Steps: $stepCount"
+        "Steps: $stepCount".also { stepsTextView.text = it }
         val caloriesBurned = stepCount * 0.04 // Example calculation
         val milesWalked = stepCount * 0.0005 // Example calculation
-        caloriesTextView.text = "Calories: %.2f".format(caloriesBurned)
-        milesTextView.text = "Miles: %.2f".format(milesWalked)
+        "Calories: %.2f".format(caloriesBurned).also { caloriesTextView.text = it }
+        "Miles: %.2f".format(milesWalked).also { milesTextView.text = it }
 
         // Update progress bars
         stepsProgressBar.progress = stepCount
@@ -145,7 +145,7 @@ class HomeFragment : Fragment(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // Not needed for this implementation
+        // Not needed. Skipped
     }
 
     override fun onResume() {
