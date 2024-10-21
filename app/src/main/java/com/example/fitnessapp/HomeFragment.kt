@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sqrt
@@ -33,6 +34,8 @@ class HomeFragment : Fragment(), SensorEventListener {
     private val threshold = 6.0
     private lateinit var dbHelper: StepDatabaseHelper
     private lateinit var db: SQLiteDatabase
+    private val milestones = listOf(100, 200, 500, 1000, 2000, 3000, 4000, 5000) // Example milestones
+    private lateinit var viewModel: MilestonesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +54,8 @@ class HomeFragment : Fragment(), SensorEventListener {
 
         dbHelper = StepDatabaseHelper(requireContext())
         db = dbHelper.writableDatabase
+
+        viewModel = ViewModelProvider(requireActivity()).get(MilestonesViewModel::class.java)
 
         loadStepsForToday()
 
@@ -124,7 +129,17 @@ class HomeFragment : Fragment(), SensorEventListener {
                     stepCount++
                     saveStepsForToday()
                     updateUI()
+                    checkMilestones()
                 }
+            }
+        }
+    }
+
+    private fun checkMilestones() {
+        for (milestone in milestones) {
+            if (stepCount == milestone) {
+                viewModel.addMilestone(milestone)
+                break
             }
         }
     }
